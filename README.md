@@ -29,6 +29,17 @@ archive-image-resizer --input input/xxx.part1.rar
 archive-image-resizer --input input/xxx.part1.rar --resume
 ```
 
+Without `run.sh`, use Python directly (all options are the same):
+
+```bash
+# inside the virtualenv, as a module
+.venv/bin/python -m archive_image_resizer --input input/xxx.zip --dry-run
+# without installing the package: run from the repository root with src on the path
+PYTHONPATH=src python3 -m archive_image_resizer --input input/xxx.zip --dry-run
+# from Python code
+python3 -c "from archive_image_resizer.cli import main; main(['--input', 'input/xxx.zip', '--limit', '10'])"
+```
+
 Each run creates a new output ZIP named `output-yymmdd-HHMMSS.zip` (e.g. `output-260925-135136.zip`). Existing ZIPs are never deleted or overwritten; remove old ones by hand. `--resume` appends to the latest timestamped ZIP. A run without `--resume` recreates state.json. For split RAR, **keep part1 to partN in the same directory** (the first volume alone cannot be extracted).
 
 ## Progress
@@ -95,6 +106,17 @@ archive-image-resizer --input input/xxx.part1.rar --output output/test.zip --lim
 # 全件 / 中断後の再開
 archive-image-resizer --input input/xxx.part1.rar
 archive-image-resizer --input input/xxx.part1.rar --resume
+```
+
+`run.sh` を使わず、Pythonから直接実行することもできます(オプションはすべて共通です)。
+
+```bash
+# 仮想環境(.venv)の中で、モジュールとして実行
+.venv/bin/python -m archive_image_resizer --input input/xxx.zip --dry-run
+# パッケージをインストールせずに、リポジトリ直下から src をパスに通して実行 (依存パッケージは必要)
+PYTHONPATH=src python3 -m archive_image_resizer --input input/xxx.zip --dry-run
+# Pythonコードから呼び出す
+python3 -c "from archive_image_resizer.cli import main; main(['--input', 'input/xxx.zip', '--limit', '10'])"
 ```
 
 出力ZIPは実行ごとに `output-yymmdd-HHMMSS.zip`(例: `output-260925-135136.zip`)の名前で新規作成します。既存のZIPは削除も上書きもしないので、古いものは手動で削除してください。`--resume` は、最新の日時付きZIPに追記して再開します。`--resume` なしで実行すると、state.json を作り直します。分割RARは、**part1〜partN を同じディレクトリに置いてください**(先頭の巻だけでは展開できません)。
