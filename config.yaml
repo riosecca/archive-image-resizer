@@ -1,0 +1,25 @@
+input: input/archive.part1.rar
+work_dir: work
+output: output/output.zip
+log_dir: logs
+state_file: work/state.json
+zip_volume_size: null        # bytes. split output only when set
+zip_name_encoding: cp932     # input ZIP names without the UTF-8 flag are decoded with this; null keeps cp437
+image:
+  convert_extensions: [jpg, jpeg, png, webp]
+  skip_below_bytes: 1048576  # files at or below 1MB are copied unchanged
+  quality: 85
+  # height in px or more -> scale. Checked from the largest
+  height_rules:
+    - {min_height: 10000, scale: 0.10}
+    - {min_height: 8000, scale: 0.15}
+    - {min_height: 5000, scale: 0.20}
+    - {min_height: 4000, scale: 0.25}
+    - {min_height: 3000, scale: 0.40}
+    - {min_height: 2000, scale: 0.50}
+    - {min_height: 1300, scale: 0.75}
+throttle:
+  sleep_ms: 200
+  cpu_percent: 85
+  load_per_core: 1.25
+  wait_seconds: 30

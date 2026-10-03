@@ -1,0 +1,12 @@
+.venv/
+input/
+work/
+output/
+logs/
+state.json
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+*.zip
+*.egg-info/

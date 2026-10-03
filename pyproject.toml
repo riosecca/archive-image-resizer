@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "archive-image-resizer"
+version = "0.1.0"
+description = "Shrink images in RAR/ZIP/7z archives by pixel height and repack them into a ZIP"
+requires-python = ">=3.10"
+dependencies = [
+    "Pillow>=10",
+    "PyYAML>=6",
+    "psutil>=5.9",
+    "py7zr>=0.21",
+]
+
+[project.scripts]
+archive-image-resizer = "archive_image_resizer.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
