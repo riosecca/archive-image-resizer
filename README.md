@@ -15,30 +15,29 @@ python3 -m venv .venv
 
 ## Usage
 
-Run `./run.sh [options]` (when `--input` is omitted, it picks `*.part1.rar` in input/, otherwise the first rar/zip/7z). Examples: `./run.sh --dry-run` / `./run.sh --limit 10 --output output/test.zip` / `./run.sh` (everything) / `./run.sh --resume`. The equivalent commands below use `.venv/bin/archive-image-resizer` (or run them after `source .venv/bin/activate`). For split RAR, give the first volume. Always try a few files with `--limit` before a full run.
+Activate the virtualenv first (`source .venv/bin/activate`), then run it as a Python module. The options are the same for every way of running it:
+
+| How | Command |
+|---|---|
+| Python module (recommended) | `python -m archive_image_resizer [options]` |
+| Installed command | `archive-image-resizer [options]` |
+| Without installing the package (from the repository root; the dependencies must be installed) | `PYTHONPATH=src python3 -m archive_image_resizer [options]` |
+| From Python code | `from archive_image_resizer.cli import main; main(["--input", "input/xxx.zip", "--limit", "10"])` |
+| Wrapper script (no activation needed) | `./run.sh [options]` (when `--input` is omitted, it picks `*.part1.rar` in input/, otherwise the first rar/zip/7z) |
 
 ```bash
-# list only (input: .rar / .zip / .7z)
-archive-image-resizer --input input/xxx.part1.rar --dry-run
-archive-image-resizer --input input/xxx.zip --dry-run
-archive-image-resizer --input input/xxx.7z --dry-run
+# list only (input: .rar / .zip / .7z; for split RAR give the first volume)
+python -m archive_image_resizer --input input/xxx.part1.rar --dry-run
+python -m archive_image_resizer --input input/xxx.zip --dry-run
+python -m archive_image_resizer --input input/xxx.7z --dry-run
 # try only 10 files
-archive-image-resizer --input input/xxx.part1.rar --output output/test.zip --limit 10
+python -m archive_image_resizer --input input/xxx.part1.rar --output output/test.zip --limit 10
 # everything / resume after an interruption
-archive-image-resizer --input input/xxx.part1.rar
-archive-image-resizer --input input/xxx.part1.rar --resume
+python -m archive_image_resizer --input input/xxx.part1.rar
+python -m archive_image_resizer --input input/xxx.part1.rar --resume
 ```
 
-Without `run.sh`, use Python directly (all options are the same):
-
-```bash
-# inside the virtualenv, as a module
-.venv/bin/python -m archive_image_resizer --input input/xxx.zip --dry-run
-# without installing the package: run from the repository root with src on the path
-PYTHONPATH=src python3 -m archive_image_resizer --input input/xxx.zip --dry-run
-# from Python code
-python3 -c "from archive_image_resizer.cli import main; main(['--input', 'input/xxx.zip', '--limit', '10'])"
-```
+Always try a few files with `--limit` before a full run.
 
 Each run creates a new output ZIP named `output-yymmdd-HHMMSS.zip` (e.g. `output-260925-135136.zip`). Existing ZIPs are never deleted or overwritten; remove old ones by hand. `--resume` appends to the latest timestamped ZIP. A run without `--resume` recreates state.json. For split RAR, **keep part1 to partN in the same directory** (the first volume alone cannot be extracted).
 
@@ -94,30 +93,29 @@ python3 -m venv .venv
 
 ### 使い方
 
-`./run.sh [オプション]` で実行します(`--input` を省略すると、input/ の `*.part1.rar`、なければ最初の rar/zip/7z を選びます)。例: `./run.sh --dry-run` / `./run.sh --limit 10 --output output/test.zip` / `./run.sh`(全件)/ `./run.sh --resume`。以下は同等のコマンドです(`.venv/bin/archive-image-resizer`、または `source .venv/bin/activate` の後に実行)。分割RARは先頭の巻を指定します。全件を処理する前に、必ず `--limit` で少数のファイルを試してください。
+先に仮想環境を有効にし(`source .venv/bin/activate`)、Pythonのモジュールとして実行します。どの実行方法でも、オプションは共通です。
+
+| 方法 | コマンド |
+|---|---|
+| Pythonモジュール(推奨) | `python -m archive_image_resizer [オプション]` |
+| インストールされたコマンド | `archive-image-resizer [オプション]` |
+| パッケージをインストールせずに実行(リポジトリ直下から。依存パッケージは必要) | `PYTHONPATH=src python3 -m archive_image_resizer [オプション]` |
+| Pythonコードから呼び出す | `from archive_image_resizer.cli import main; main(["--input", "input/xxx.zip", "--limit", "10"])` |
+| ラッパースクリプト(有効化は不要) | `./run.sh [オプション]`(`--input` を省略すると、input/ の `*.part1.rar`、なければ最初の rar/zip/7z を選びます) |
 
 ```bash
-# 一覧の確認のみ (入力は .rar / .zip / .7z)
-archive-image-resizer --input input/xxx.part1.rar --dry-run
-archive-image-resizer --input input/xxx.zip --dry-run
-archive-image-resizer --input input/xxx.7z --dry-run
+# 一覧の確認のみ (入力は .rar / .zip / .7z。分割RARは先頭の巻を指定)
+python -m archive_image_resizer --input input/xxx.part1.rar --dry-run
+python -m archive_image_resizer --input input/xxx.zip --dry-run
+python -m archive_image_resizer --input input/xxx.7z --dry-run
 # 10ファイルだけ試す
-archive-image-resizer --input input/xxx.part1.rar --output output/test.zip --limit 10
+python -m archive_image_resizer --input input/xxx.part1.rar --output output/test.zip --limit 10
 # 全件 / 中断後の再開
-archive-image-resizer --input input/xxx.part1.rar
-archive-image-resizer --input input/xxx.part1.rar --resume
+python -m archive_image_resizer --input input/xxx.part1.rar
+python -m archive_image_resizer --input input/xxx.part1.rar --resume
 ```
 
-`run.sh` を使わず、Pythonから直接実行することもできます(オプションはすべて共通です)。
-
-```bash
-# 仮想環境(.venv)の中で、モジュールとして実行
-.venv/bin/python -m archive_image_resizer --input input/xxx.zip --dry-run
-# パッケージをインストールせずに、リポジトリ直下から src をパスに通して実行 (依存パッケージは必要)
-PYTHONPATH=src python3 -m archive_image_resizer --input input/xxx.zip --dry-run
-# Pythonコードから呼び出す
-python3 -c "from archive_image_resizer.cli import main; main(['--input', 'input/xxx.zip', '--limit', '10'])"
-```
+全件を処理する前に、必ず `--limit` で少数のファイルを試してください。
 
 出力ZIPは実行ごとに `output-yymmdd-HHMMSS.zip`(例: `output-260925-135136.zip`)の名前で新規作成します。既存のZIPは削除も上書きもしないので、古いものは手動で削除してください。`--resume` は、最新の日時付きZIPに追記して再開します。`--resume` なしで実行すると、state.json を作り直します。分割RARは、**part1〜partN を同じディレクトリに置いてください**(先頭の巻だけでは展開できません)。
 
